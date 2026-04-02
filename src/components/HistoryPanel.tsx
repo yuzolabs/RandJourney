@@ -19,12 +19,21 @@ export function HistoryPanel({ isOpen, onClose, onSelectEntry, history, onRemove
   }
 
   return (
-    <aside
-      className={`${styles.panel} ${isOpen ? styles.open : ''}`}
-      aria-label="ダーツ履歴"
-      aria-hidden={!isOpen}
-    >
-      <div className={styles.header}>
+    <>
+      <div 
+        className={`${styles.backdrop} ${isOpen ? styles.open : ''}`} 
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <aside
+        className={`${styles.panel} ${isOpen ? styles.open : ''}`}
+        aria-label="ダーツ履歴"
+        aria-hidden={!isOpen}
+      >
+        <div className={styles.dragHandle} onClick={onClose}>
+          <div className={styles.dragIndicator} />
+        </div>
+        <div className={styles.header}>
         <h2 className={styles.title}>履歴</h2>
         <div className={styles.headerActions}>
           {history.length > 0 && (
@@ -49,7 +58,18 @@ export function HistoryPanel({ isOpen, onClose, onSelectEntry, history, onRemove
 
       <div className={styles.content}>
         {sortedHistory.length === 0 ? (
-          <p className={styles.emptyMessage}>まだダーツを投げていません 🎯</p>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>🗺️</div>
+            <p className={styles.emptyTitle}>まだダーツを投げていません</p>
+            <p className={styles.emptyDescription}>ダーツを投げて、次の旅先を見つけましょう！</p>
+            <button
+              type="button"
+              className={styles.emptyButton}
+              onClick={onClose}
+            >
+              今すぐ始める
+            </button>
+          </div>
         ) : (
           <ul className={styles.list}>
             {sortedHistory.map((entry, index) => {
@@ -85,5 +105,6 @@ export function HistoryPanel({ isOpen, onClose, onSelectEntry, history, onRemove
         )}
       </div>
     </aside>
+    </>
   )
 }

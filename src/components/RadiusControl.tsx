@@ -18,6 +18,8 @@ export default function RadiusControl({ radius, onRadiusChange }: RadiusControlP
     }
   }
 
+  const presets = [1, 5, 10, 25, 50, 100, 200]
+
   return (
     <div className={styles.container} data-testid="radius-control">
       <div className={styles.header}>
@@ -42,6 +44,18 @@ export default function RadiusControl({ radius, onRadiusChange }: RadiusControlP
           value={radius}
           onChange={handleSliderChange}
         />
+      </div>
+      <div className={styles.presetsContainer}>
+        {presets.map((preset) => (
+          <button
+            key={preset}
+            type="button"
+            className={`${styles.presetChip} ${radius === preset ? styles.presetChipActive : ''}`}
+            onClick={() => onRadiusChange(preset)}
+          >
+            {preset}
+          </button>
+        ))}
       </div>
     </div>
   )

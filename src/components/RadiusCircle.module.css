@@ -1,0 +1,15 @@
+.roulette {
+  animation: rouletteSpin 0.8s linear infinite;
+  stroke-dasharray: 10 30;
+  stroke-linecap: round;
+  stroke-width: 4;
+  will-change: stroke-dashoffset;
+}
+
+@keyframes rouletteSpin {
+  to {
+    stroke-dashoffset: -80;
+  }
+}
+
+

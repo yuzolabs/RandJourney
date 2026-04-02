@@ -5,7 +5,8 @@ import DartButton from './components/DartButton'
 import DartMarker from './components/DartMarker'
 import RadiusControl from './components/RadiusControl'
 import RadiusCircle from './components/RadiusCircle'
-import CenterCross from './components/CenterCross'
+import DraggableCenter from './components/DraggableCenter';
+import FirstTimeHint from './components/FirstTimeHint'
 import GeolocationButton from './components/GeolocationButton'
 import { HistoryPanel } from './components/HistoryPanel'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -88,15 +89,14 @@ export default function App() {
                   onRethrow={reset}
                 />
               )}
+              <DraggableCenter />
               <RadiusCircle radiusKm={radius} />
               <div className={styles.geoButtonWrapper}>
                 <GeolocationButton onError={setToastMessage} />
               </div>
             </MapView>
 
-            <div className={styles.centerCrossWrapper}>
-              <CenterCross />
-            </div>
+            <FirstTimeHint />
 
             <div className={styles.bottomControls}>
               <div className={styles.radiusControlWrapper}>
