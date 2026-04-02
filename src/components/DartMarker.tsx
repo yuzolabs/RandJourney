@@ -10,16 +10,21 @@ interface DartMarkerProps {
   lng: number
   result?: DartResult
   onRethrow?: () => void
+  autoOpenPopup?: boolean
 }
 
-export default function DartMarker({ lat, lng, result, onRethrow }: DartMarkerProps) {
+export default function DartMarker({ lat, lng, result, onRethrow, autoOpenPopup = true }: DartMarkerProps) {
   const markerRef = useRef<L.Marker>(null)
 
   useEffect(() => {
-    if (result && markerRef.current) {
-      markerRef.current.openPopup()
+    if (autoOpenPopup && result && markerRef.current) {
+      const timer = setTimeout(() => {
+        markerRef.current?.openPopup()
+      }, 100)
+
+      return () => clearTimeout(timer)
     }
-  }, [result])
+  }, [autoOpenPopup, result])
 
   const icon = useMemo(() => {
     return L.divIcon({

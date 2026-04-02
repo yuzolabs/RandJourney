@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type L from 'leaflet'
 
 const DEFAULT_ZOOM = 15
@@ -26,11 +26,19 @@ export function getShareUrl(lat: number, lng: number): string {
   return `${window.location.origin}${window.location.pathname}?ll=${lat.toFixed(6)},${lng.toFixed(6)}`
 }
 
-export function useUrlSharing(map: L.Map | null): void {
+export function useUrlSharing(map: L.Map | null): { lat: number; lng: number } | null {
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null)
+
   useEffect(() => {
     const params = parseUrlParams(window.location.search)
-    if (!params || !map) return
+    setLocation(params)
+  }, [])
 
-    map.flyTo([params.lat, params.lng], DEFAULT_ZOOM)
-  }, [map])
+  useEffect(() => {
+    if (!location || !map) return
+
+    map.flyTo([location.lat, location.lng], DEFAULT_ZOOM)
+  }, [location, map])
+
+  return location
 }

@@ -16,6 +16,7 @@ import { useDartThrow } from './hooks/useDartThrow'
 import { useUrlSharing } from './hooks/useUrlSharing'
 import { useRadius } from './hooks/useRadius'
 import { useHistory } from './hooks/useHistory'
+import { reverseGeocode } from './lib/geocoding'
 import styles from './App.module.css'
 import './styles/tokens.css'
 
@@ -24,10 +25,21 @@ export default function App() {
   const { radius, setRadius } = useRadius()
   const { state, result, isAnimating, throwDart, reset, cancelAutoReset } = useDartThrow({ map, radiusKm: radius })
   const { history, addEntry, removeEntry, clearHistory } = useHistory()
+  const sharedLocation = useUrlSharing(map)
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [sharedResult, setSharedResult] = useState<
+    | {
+        lat: number
+        lng: number
+        prefecture: string
+        city: string
+        address: string
+      }
+    | undefined
+  >(undefined)
 
   useEffect(() => {
     if (typeof window.matchMedia !== 'function') return
@@ -47,12 +59,37 @@ export default function App() {
   }, [result, addEntry])
 
   useEffect(() => {
+    if (!sharedLocation) {
+      setSharedResult(undefined)
+      return
+    }
+
+    reverseGeocode(sharedLocation.lat, sharedLocation.lng).then((geo) => {
+      if (geo) {
+        setSharedResult({
+          lat: sharedLocation.lat,
+          lng: sharedLocation.lng,
+          prefecture: geo.prefecture,
+          city: geo.city,
+          address: geo.address,
+        })
+      } else {
+        setSharedResult({
+          lat: sharedLocation.lat,
+          lng: sharedLocation.lng,
+          prefecture: '',
+          city: '',
+          address: '',
+        })
+      }
+    })
+  }, [sharedLocation])
+
+  useEffect(() => {
     if (state === 'error') {
       setToastMessage('ダーツを投げられませんでした。もう一度試してください。')
     }
   }, [state])
-
-  useUrlSharing(map)
 
   return (
     <ErrorBoundary>
@@ -83,6 +120,13 @@ export default function App() {
               </div>
             )}
             <MapView onMapCreated={setMap}>
+              {sharedResult && (
+                <DartMarker
+                  lat={sharedResult.lat}
+                  lng={sharedResult.lng}
+                  result={sharedResult}
+                />
+              )}
               {result && (
                 <DartMarker
                   lat={result.lat}
