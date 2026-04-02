@@ -60,7 +60,7 @@ if not defined WSL_WORKSPACE_PATH (
 
 set "INIT_SCRIPT=%WSL_WORKSPACE_PATH%/.devcontainer/host-initialize.sh"
 echo [INFO] Initializing DevContainer configuration...
-wsl bash -c "if [ -f '%INIT_SCRIPT%' ]; then bash '%INIT_SCRIPT%' '%WSL_WORKSPACE_PATH%' '%WORKSPACE_NAME%' '/workspaces/my-repository-template' '/workspace'; else echo 'host-initialize.sh not found, skipping initialization'; fi"
+wsl bash -c "if [ -f '%INIT_SCRIPT%' ]; then bash '%INIT_SCRIPT%' '%WSL_WORKSPACE_PATH%' '%WORKSPACE_NAME%' '/workspaces/RandJourney' '/workspace'; else echo 'host-initialize.sh not found, skipping initialization'; fi"
 if errorlevel 1 (
     echo [WARNING] Initialization script failed, but continuing...
 )

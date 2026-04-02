@@ -1,4 +1,4 @@
-# my-repository-template
+# RandJourney
 
 ## 初期設定
 
@@ -6,7 +6,7 @@
 
 ```bash
 REPO_NAME=$(basename "$(git rev-parse --show-toplevel)")
-sed -i "s/my-repository-template/$REPO_NAME/g" \
+sed -i "s/RandJourney/$REPO_NAME/g" \
   .devcontainer/devcontainer.json
 
 bun install --frozen-lockfile
@@ -65,8 +65,8 @@ host 側の実際の `.git` 管理ファイルは書き換えないため、work
 
 ```txt
 ..
-├── my-repository-template
-└── my-repository-template.worktrees
+├── RandJourney
+└── RandJourney.worktrees
     ├── feat-branch1
     └── fix-branch2
 ```
@@ -76,7 +76,7 @@ host 側の実際の `.git` 管理ファイルは書き換えないため、work
 過去バージョンの設定で `/workspace` を指す壊れた worktree メタデータが残っている場合は、main リポジトリ側で以下を実行して掃除してください。
 
 ```bash
-git -C ../my-repository-template worktree prune --expire now
+git -C ../RandJourney worktree prune --expire now
 ```
 
 #### worktrunkを使用する場合
