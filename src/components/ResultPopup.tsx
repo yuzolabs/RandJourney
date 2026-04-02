@@ -16,7 +16,6 @@ export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
     <Popup minWidth={240} maxWidth={320} offset={[0, -16]}>
       <div className={styles.popupContainer}>
         <div className={styles.header}>
-          <div className={styles.icon}>🎯</div>
           {isUnknown ? (
             <h2 className={styles.title}>（不明な地点）</h2>
           ) : (
