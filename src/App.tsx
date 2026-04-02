@@ -1,5 +1,130 @@
+import { useState, useRef, useEffect } from 'react'
+import type L from 'leaflet'
 import MapView from './components/MapView'
+import DartButton from './components/DartButton'
+import DartMarker from './components/DartMarker'
+import RadiusControl from './components/RadiusControl'
+import RadiusCircle from './components/RadiusCircle'
+import CenterCross from './components/CenterCross'
+import GeolocationButton from './components/GeolocationButton'
+import { HistoryPanel } from './components/HistoryPanel'
+import ErrorBoundary from './components/ErrorBoundary'
+import Toast from './components/Toast'
+import { useDartThrow } from './hooks/useDartThrow'
+import { useUrlSharing } from './hooks/useUrlSharing'
+import { useRadius } from './hooks/useRadius'
+import { useHistory } from './hooks/useHistory'
+import styles from './App.module.css'
+import './styles/tokens.css'
 
 export default function App() {
-  return <MapView />
+  const [map, setMap] = useState<L.Map | null>(null)
+  const { radius, setRadius } = useRadius()
+  const { state, result, throwDart, reset } = useDartThrow({ map, radiusKm: radius })
+  const { history, addEntry, removeEntry, clearHistory } = useHistory()
+
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return
+    const mql = window.matchMedia('(min-width: 768px)')
+    setIsDesktop(mql.matches)
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
+
+  const lastResultRef = useRef(result)
+  useEffect(() => {
+    if (result && result !== lastResultRef.current) {
+      addEntry(result)
+      lastResultRef.current = result
+    }
+  }, [result, addEntry])
+
+  useEffect(() => {
+    if (state === 'error') {
+      setToastMessage('ダーツを投げられませんでした。もう一度試してください。')
+    }
+  }, [state])
+
+  useUrlSharing(map)
+
+  return (
+    <ErrorBoundary>
+      <div className={styles.appWrapper}>
+        <Toast message={toastMessage} onDismiss={() => setToastMessage(null)} />
+        <div className={styles.mainContent}>
+          <header className={styles.header}>
+            <h1 className={styles.title}>
+              <span className={styles.titleIcon}>🎯</span>
+              RandJourney
+            </h1>
+            <button
+              className={styles.historyToggle}
+              onClick={() => setIsHistoryOpen(true)}
+              aria-label="履歴を開く"
+              aria-expanded={isHistoryOpen || isDesktop}
+            >
+              🕐
+            </button>
+          </header>
+
+          <div className={styles.mapArea}>
+            {!map && (
+              <div className={styles.mapLoading}>
+                <span>🗾</span>
+                <p>地図を読み込み中...</p>
+              </div>
+            )}
+            <MapView onMapCreated={setMap}>
+              {result && (
+                <DartMarker
+                  lat={result.lat}
+                  lng={result.lng}
+                  result={result}
+                  onRethrow={reset}
+                />
+              )}
+              <RadiusCircle radiusKm={radius} />
+              <div className={styles.geoButtonWrapper}>
+                <GeolocationButton onError={setToastMessage} />
+              </div>
+            </MapView>
+
+            <div className={styles.centerCrossWrapper}>
+              <CenterCross />
+            </div>
+
+            <div className={styles.bottomControls}>
+              <div className={styles.radiusControlWrapper}>
+                <RadiusControl radius={radius} onRadiusChange={setRadius} />
+              </div>
+              <div className={styles.dartButtonWrapper}>
+                <DartButton state={state} onThrow={throwDart} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <HistoryPanel
+          isOpen={isHistoryOpen || isDesktop}
+          onClose={() => setIsHistoryOpen(false)}
+          history={history}
+          onRemoveEntry={removeEntry}
+          onClearHistory={clearHistory}
+          onSelectEntry={(entry) => {
+            if (map) {
+              map.flyTo([entry.lat, entry.lng], 15)
+              if (!isDesktop) {
+                setIsHistoryOpen(false)
+              }
+            }
+          }}
+        />
+      </div>
+    </ErrorBoundary>
+  )
 }

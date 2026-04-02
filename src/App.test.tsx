@@ -1,12 +1,13 @@
-import { describe, it, expect } from 'bun:test'
-import './test/setup'
-import { createElement } from 'react'
-import { render } from './test/test-utils'
-import App from './App'
+await import('./test/setup')
+
+const [{ render }, { default: App }] = await Promise.all([
+  import('./test/test-utils'),
+  import('./App'),
+])
 
 describe('App', () => {
   it('renders without crashing', () => {
-    render(createElement(App))
+    render(<App />)
     expect(document.body).toBeInTheDocument()
   })
 })
