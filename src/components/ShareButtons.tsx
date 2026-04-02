@@ -7,6 +7,17 @@ interface ShareButtonsProps {
   url: string
 }
 
+const extractCityName = (text: string): string => {
+  if (text === '（不明な地点）') return '不明な地点'
+
+  const parts = text.split(' ')
+  if (parts.length >= 2) {
+    return parts[1]
+  }
+
+  return text
+}
+
 export default function ShareButtons({ text, url }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
 
@@ -27,7 +38,11 @@ export default function ShareButtons({ text, url }: ShareButtonsProps) {
       <button
         type="button"
         className={styles.shareButton}
-        onClick={() => shareToX(text, url)}
+        onClick={() => {
+          const cityName = extractCityName(text)
+          const shareText = `あなたは${cityName}にいってらっしゃーい`
+          shareToX(shareText, url)
+        }}
         aria-label="Xで共有"
       >
         <span className={styles.shareIcon}>𝕏</span>
