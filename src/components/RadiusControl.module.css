@@ -1,0 +1,117 @@
+.container {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: var(--space-4);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-control);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: calc(100% - var(--space-8));
+  max-width: 400px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: rgba(28, 28, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.numberInput {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  background: transparent;
+  border: none;
+  width: 80px;
+  text-align: right;
+  outline: none;
+}
+
+.numberInput::-webkit-inner-spin-button,
+.numberInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numberInput[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.label {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  height: var(--touch-target-min);
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+.slider:focus {
+  outline: none;
+}
+
+.slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: var(--color-separator);
+  border-radius: var(--radius-sm);
+}
+
+.slider::-webkit-slider-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: var(--color-surface-secondary);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -11px;
+  box-shadow: var(--shadow-md);
+  border: 0.5px solid var(--color-separator);
+}
+
+.slider::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: var(--color-separator);
+  border-radius: var(--radius-sm);
+}
+
+.slider::-moz-range-thumb {
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: var(--color-surface-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  border: 0.5px solid var(--color-separator);
+}
