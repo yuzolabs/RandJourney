@@ -30,7 +30,7 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
-  const [sharedResult, setSharedResult] = useState<
+  const [displayResult, setDisplayResult] = useState<
     | {
         lat: number
         lng: number
@@ -60,13 +60,13 @@ export default function App() {
 
   useEffect(() => {
     if (!sharedLocation) {
-      setSharedResult(undefined)
+      setDisplayResult(undefined)
       return
     }
 
     reverseGeocode(sharedLocation.lat, sharedLocation.lng).then((geo) => {
       if (geo) {
-        setSharedResult({
+        setDisplayResult({
           lat: sharedLocation.lat,
           lng: sharedLocation.lng,
           prefecture: geo.prefecture,
@@ -74,7 +74,7 @@ export default function App() {
           address: geo.address,
         })
       } else {
-        setSharedResult({
+        setDisplayResult({
           lat: sharedLocation.lat,
           lng: sharedLocation.lng,
           prefecture: '',
@@ -120,11 +120,11 @@ export default function App() {
               </div>
             )}
             <MapView onMapCreated={setMap}>
-              {sharedResult && (
+              {displayResult && (
                 <DartMarker
-                  lat={sharedResult.lat}
-                  lng={sharedResult.lng}
-                  result={sharedResult}
+                  lat={displayResult.lat}
+                  lng={displayResult.lng}
+                  result={displayResult}
                 />
               )}
               {result && (
@@ -174,6 +174,13 @@ export default function App() {
           onSelectEntry={(entry) => {
             if (map) {
               map.flyTo([entry.lat, entry.lng], 15)
+              setDisplayResult({
+                lat: entry.lat,
+                lng: entry.lng,
+                prefecture: entry.prefecture,
+                city: entry.city,
+                address: entry.address,
+              })
               if (!isDesktop) {
                 setIsHistoryOpen(false)
               }
