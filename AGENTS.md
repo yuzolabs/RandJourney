@@ -2,50 +2,57 @@
 
 **Think in English, output in Japanese.**
 
-## Environment
+## OVERVIEW
+RandJourney: React 19 + TypeScript + Vite project for random point generation using Leaflet.
+Package Manager: Bun v1.3.6.
 
-- bun (always use `bun install --frozen-lockfile` to install dependencies)
-- uv (python packages management)
+## STRUCTURE
+- `src/components/`: React components (15 total) with CSS Modules.
+- `src/hooks/`: Custom hooks (useDartThrow, useHistory, useRadius, useUrlSharing).
+- `src/lib/`: Utility modules (geo, geocoding, muni, random-point, share, urls).
+- `src/test/`: Vitest + jsdom setup.
+- `src/styles/`: CSS tokens and global styles.
+- `src/data/`: `muni.json` (municipality data).
 
-## Notice
+## WHERE TO LOOK
+- Entry: `index.html` -> `src/main.tsx` -> `src/App.tsx`.
+- Logic: `src/lib/` for core geo/random algorithms.
+- State: `src/hooks/` for domain-specific state management.
 
-- Do not modify `package.json`/lockfiles to add or update dependencies without explicit user approval.
-- Do not chain `cd` commands with `&&`.
+## CONVENTIONS
+- Styles: `ComponentName.module.css` paired with `ComponentName.tsx`.
+- CSS: Use CSS custom properties from `src/styles/tokens.css`.
+- Exports: Named exports for hooks and utilities.
+- Tests: Co-located as `*.test.ts` alongside source files.
 
-## Tools Selection in shell
+## ANTI-PATTERNS
+- None documented.
 
+## COMMANDS
+- Dev: `bun run dev`
+- Build: `bun run build` (Type check + Vite build)
+- Test: `bun run test` (Vitest)
+- Test CI: `bun run test:ci`
+
+## TOOLS SELECTION (PRESERVE)
 When you need to call tools from the shell, use this guide:
 
-- Exclude bulky folders to keep searches fast and relevant: `.git` and `node_modules`
-- Also exclude `coverage`, `out`, `dist`, and `.venv`
-- Find files by file name: `fd`
-- Find files with path name: `fd -p <file-path>`
-- List files in a directory: `fd . <directory>`
-- Find files with extension and pattern: `fd -e <extension> <pattern>`
-- Find Text: `rg` (ripgrep)
-- Prefer running searches against a scoped path (e.g., `src`) to implicitly avoid vendor and VCS directories.
-- Examples:
-  - `fd --hidden --exclude .git --exclude node_modules --exclude coverage --exclude out --exclude dist --type f ".tsx?$" src`
-  - `rg -n "pattern" -g "!{.git,node_modules,coverage,out,dist}" src`
-- Find Code Structure: `ast-grep`
-  - Default to TypeScript when in TS/TSX repos:
-    - `.ts` → `ast-grep --lang ts -p '<pattern>'`
-    - `.tsx` (React) → `ast-grep --lang tsx -p '<pattern>'`
-  - Other common languages:
-    - Python → `ast-grep --lang python -p '<pattern>'`
-    - Bash → `ast-grep --lang bash -p '<pattern>'`
-    - JavaScript → `ast-grep --lang js -p '<pattern>'`
-    - Rust → `ast-grep --lang rust -p '<pattern>'`
-    - JSON → `ast-grep --lang json -p '<pattern>'`
-  - TypeScript quick actions:
-    - If `ast-grep` is available, avoid `rg` or `grep` unless a plain-text search is explicitly requested.
-    - Prefer `tsx` for fast Node execution.
-    - Structured search and refactors with `ast-grep`.
-    - Find all exported interfaces: `ast-grep --lang ts -p 'export interface $I { ... }'`.
-    - Find default exports: `ast-grep --lang ts -p 'export default $X'`.
-    - Find a function call with args: `ast-grep --lang ts -p 'axios.get($URL, $$REST)'`.
-    - Rename an imported specifier (codemod): `ast-grep --lang ts -p 'import { $Old as $Alias } from "$M"' --rewrite 'import { $Old } from "$M"' -U`.
-    - Disallow await in Promise.all items (quick fix): `ast-grep --lang ts -p 'await $X' --inside 'Promise.all($_)' --rewrite '$X'`.
-    - React hook smell: empty deps array in useEffect: `ast-grep --lang tsx -p 'useEffect($FN, [])'`.
-    - List matching files then pick with fzf: `ast-grep --lang ts -p '<pattern>' -l | fzf -m | xargs -r sed -n '1,120p'`.
-- JSON: `jq`
+- Exclude bulky folders: `.git`, `node_modules`, `coverage`, `out`, `dist`, `.venv`.
+- Find files by name: `fd`.
+- Find text: `rg` (ripgrep).
+- Find Code Structure: `ast-grep`.
+  - `.ts` -> `ast-grep --lang ts -p '<pattern>'`
+  - `.tsx` -> `ast-grep --lang tsx -p '<pattern>'`
+  - TypeScript actions:
+    - Prefer `ast-grep` over `rg` for structured code search.
+    - Exported interfaces: `ast-grep --lang ts -p 'export interface $I { ... }'`.
+    - Function calls: `ast-grep --lang ts -p 'axios.get($URL, $$REST)'`.
+- JSON: `jq`.
+
+## ENVIRONMENT
+- bun (always use `bun install --frozen-lockfile`)
+- uv (python packages management)
+
+## NOTICE
+- Do not modify `package.json`/lockfiles without explicit user approval.
+- Do not chain `cd` commands with `&&`.
