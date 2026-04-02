@@ -58,6 +58,8 @@ export function useDartThrow({ map, radiusKm }: UseDartThrowOptions) {
     setError(null)
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
       const center = map.getCenter()
       const point = generateRandomPoint(center.lat, center.lng, radiusKm)
 
@@ -120,6 +122,8 @@ export function useDartThrow({ map, radiusKm }: UseDartThrowOptions) {
     setError(null)
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+
       const point = generateRandomPoint(centerLat, centerLng, prevRadiusKm)
 
       setIsAnimating(true)
