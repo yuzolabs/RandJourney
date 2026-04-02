@@ -175,7 +175,6 @@
   }
   
   .historyToggle {
-    display: none;
   }
 
   .geoButtonWrapper {
@@ -186,18 +185,11 @@
     padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
   }
 
+  .bottomControlsWithHistory {
+    right: 320px;
+  }
+
   .controlPanel {
     width: 400px;
-  }
-  
-  :global(aside[aria-label="ダーツ履歴"]) {
-    position: relative !important;
-    transform: translateX(0) !important;
-    width: 360px !important;
-    height: 100dvh !important;
-    border-left: 1px solid var(--color-separator) !important;
-    z-index: 10 !important;
-    flex-shrink: 0 !important;
-    box-shadow: var(--shadow-panel) !important;
   }
 }

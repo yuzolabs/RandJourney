@@ -50,6 +50,14 @@ export default function App() {
     return () => mql.removeEventListener('change', handler)
   }, [])
 
+  const lastHistoryLengthRef = useRef(0)
+  useEffect(() => {
+    if (isDesktop && history.length > lastHistoryLengthRef.current) {
+      setIsHistoryOpen(true)
+    }
+    lastHistoryLengthRef.current = history.length
+  }, [history.length, isDesktop])
+
   const lastResultRef = useRef(result)
   useEffect(() => {
     if (result && result !== lastResultRef.current) {
@@ -106,7 +114,7 @@ export default function App() {
               className={styles.historyToggle}
               onClick={() => setIsHistoryOpen(true)}
               aria-label="履歴を開く"
-              aria-expanded={isHistoryOpen || isDesktop}
+              aria-expanded={isHistoryOpen}
             >
               🕐
             </button>
@@ -154,7 +162,9 @@ export default function App() {
 
             <FirstTimeHint />
 
-            <div className={styles.bottomControls}>
+            <div
+              className={`${styles.bottomControls} ${isHistoryOpen && isDesktop ? styles.bottomControlsWithHistory : ''}`}
+            >
               <div className={styles.controlPanel}>
                 <RadiusControl radius={radius} onRadiusChange={setRadius} />
                 <div className={styles.dartButtonContainer}>
@@ -166,7 +176,7 @@ export default function App() {
         </div>
 
         <HistoryPanel
-          isOpen={isHistoryOpen || isDesktop}
+          isOpen={isHistoryOpen}
           onClose={() => setIsHistoryOpen(false)}
           history={history}
           onRemoveEntry={removeEntry}

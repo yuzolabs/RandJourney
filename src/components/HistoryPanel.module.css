@@ -81,6 +81,12 @@
   }
 }
 
+@media (min-width: 768px) {
+  .panel {
+    z-index: 700;
+  }
+}
+
 .header {
   display: flex;
   align-items: center;
