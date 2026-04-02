@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { shareToX, shareToLine, shareNative, copyToClipboard, canShareNative } from '../lib/share'
+import { shareToX, shareNative, copyToClipboard, canShareNative } from '../lib/share'
 import styles from './ShareButtons.module.css'
 
 interface ShareButtonsProps {
@@ -32,16 +32,6 @@ export default function ShareButtons({ text, url }: ShareButtonsProps) {
       >
         <span className={styles.shareIcon}>𝕏</span>
         <span className={styles.shareLabel}>Xで共有</span>
-      </button>
-
-      <button
-        type="button"
-        className={styles.shareButton}
-        onClick={() => shareToLine(url)}
-        aria-label="LINEで送る"
-      >
-        <span className={styles.shareIcon}>💬</span>
-        <span className={styles.shareLabel}>LINEで送る</span>
       </button>
 
       <button

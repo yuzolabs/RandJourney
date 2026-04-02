@@ -1,6 +1,6 @@
 import L from 'leaflet'
 import { Marker } from 'react-leaflet'
-import { useMemo } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import ResultPopup from './ResultPopup'
 import type { DartResult } from '../hooks/useDartThrow'
 import styles from './DartMarker.module.css'
@@ -13,6 +13,14 @@ interface DartMarkerProps {
 }
 
 export default function DartMarker({ lat, lng, result, onRethrow }: DartMarkerProps) {
+  const markerRef = useRef<L.Marker>(null)
+
+  useEffect(() => {
+    if (result && markerRef.current) {
+      markerRef.current.openPopup()
+    }
+  }, [result])
+
   const icon = useMemo(() => {
     return L.divIcon({
       html: `
@@ -28,7 +36,7 @@ export default function DartMarker({ lat, lng, result, onRethrow }: DartMarkerPr
   }, [])
 
   return (
-    <Marker position={[lat, lng]} icon={icon}>
+    <Marker position={[lat, lng]} icon={icon} ref={markerRef}>
       {result && <ResultPopup result={result} onRethrow={onRethrow} />}
     </Marker>
   )

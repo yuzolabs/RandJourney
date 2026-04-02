@@ -1,6 +1,6 @@
 import { Popup } from 'react-leaflet'
 import type { DartResult } from '../hooks/useDartThrow'
-import { buildGoogleMapsUrl, buildGsiMapUrl, buildGeoUri, buildAppShareUrl } from '../lib/urls'
+import { buildGoogleMapsUrl, buildGeoUri, buildAppShareUrl } from '../lib/urls'
 import ShareButtons from './ShareButtons'
 import styles from './ResultPopup.module.css'
 
@@ -25,9 +25,6 @@ export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
               {result.address && <p className={styles.address}>{result.address}</p>}
             </>
           )}
-          <p className={styles.coordinates}>
-            {result.lat.toFixed(4)}, {result.lng.toFixed(4)}
-          </p>
         </div>
 
         <hr className={styles.divider} />
@@ -40,14 +37,6 @@ export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
             className={styles.linkButton}
           >
             🗺️ Googleマップで開く
-          </a>
-          <a
-            href={buildGsiMapUrl(result.lat, result.lng, 15)}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.linkButton}
-          >
-            🗾 地理院地図で開く
           </a>
           <a href={buildGeoUri(result.lat, result.lng)} className={styles.linkButton}>
             📱 この場所を開く

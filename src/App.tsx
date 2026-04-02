@@ -11,6 +11,7 @@ import GeolocationButton from './components/GeolocationButton'
 import { HistoryPanel } from './components/HistoryPanel'
 import ErrorBoundary from './components/ErrorBoundary'
 import Toast from './components/Toast'
+import ResultCard from './components/ResultCard'
 import { useDartThrow } from './hooks/useDartThrow'
 import { useUrlSharing } from './hooks/useUrlSharing'
 import { useRadius } from './hooks/useRadius'
@@ -57,6 +58,7 @@ export default function App() {
     <ErrorBoundary>
       <div className={styles.appWrapper}>
         <Toast message={toastMessage} onDismiss={() => setToastMessage(null)} />
+        <ResultCard result={result} />
         <div className={styles.mainContent}>
           <header className={styles.header}>
             <h1 className={styles.title}>
