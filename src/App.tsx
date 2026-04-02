@@ -21,7 +21,7 @@ import './styles/tokens.css'
 export default function App() {
   const [map, setMap] = useState<L.Map | null>(null)
   const { radius, setRadius } = useRadius()
-  const { state, result, throwDart, reset } = useDartThrow({ map, radiusKm: radius })
+  const { state, result, isAnimating, throwDart, reset, cancelAutoReset } = useDartThrow({ map, radiusKm: radius })
   const { history, addEntry, removeEntry, clearHistory } = useHistory()
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
@@ -89,7 +89,17 @@ export default function App() {
                   onRethrow={reset}
                 />
               )}
-              <DraggableCenter />
+              <DraggableCenter
+                onCenterChange={() => {
+                  if (isAnimating) {
+                    return
+                  }
+                  cancelAutoReset()
+                  if (state === 'done') {
+                    reset()
+                  }
+                }}
+              />
               <RadiusCircle radiusKm={radius} />
               <div className={styles.geoButtonWrapper}>
                 <GeolocationButton onError={setToastMessage} />

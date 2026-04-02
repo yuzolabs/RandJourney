@@ -3,11 +3,16 @@ import { Marker, useMapEvents } from 'react-leaflet'
 import L from 'leaflet'
 import styles from './CenterCross.module.css'
 
-export default function DraggableCenter() {
+interface DraggableCenterProps {
+  onCenterChange?: () => void
+}
+
+export default function DraggableCenter({ onCenterChange }: DraggableCenterProps) {
   const map = useMapEvents({
     move() {
       if (!isDragging.current) {
         setPosition(map.getCenter())
+        onCenterChange?.()
       }
     },
     click(e) {
@@ -46,9 +51,10 @@ export default function DraggableCenter() {
         if (marker != null) {
           map.flyTo(marker.getLatLng(), map.getZoom())
         }
+        onCenterChange?.()
       },
     }),
-    [map],
+    [map, onCenterChange],
   )
 
   return (
