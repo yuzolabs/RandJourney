@@ -5,3 +5,7 @@ node_modules
 .devcontainer/.git-container
 .devcontainer/.gitdir-container
 .devcontainer/.env
+
+dist/
+.playwright-mcp/
+tsconfig.tsbuildinfo

@@ -1,0 +1,197 @@
+.appWrapper {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: var(--color-background);
+  display: flex;
+}
+
+.mainContent {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.mapArea {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  touch-action: none;
+}
+
+/* Header overlay */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: calc(env(safe-area-inset-top) + var(--space-2)) var(--space-4) var(--space-2);
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 0.5px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-header);
+  touch-action: auto;
+  pointer-events: auto;
+}
+
+.title {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+  font-size: var(--font-size-hero, 28px);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-danger));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  letter-spacing: -0.5px;
+}
+
+.titleIcon {
+  -webkit-text-fill-color: initial;
+}
+
+.historyToggle {
+  background: var(--color-overlay-hover);
+  border: none;
+  margin: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: inset 0 0 0 0.5px var(--color-border-subtle);
+}
+
+.historyToggle:active {
+  transform: scale(0.95);
+  background: var(--color-overlay-active);
+}
+
+/* GeoButton inside map */
+.geoButtonWrapper {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 80px);
+  right: var(--space-4);
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+/* Center cross */
+.centerCrossWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 400;
+  pointer-events: none;
+}
+
+/* Bottom controls overlay */
+.bottomControls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 400;
+  padding: var(--space-4);
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  pointer-events: none;
+}
+
+.bottomControls > * {
+  pointer-events: auto;
+}
+
+.controlPanel {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.dartButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.mapLoading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  background: var(--color-surface);
+  pointer-events: none;
+}
+
+.mapLoading span {
+  font-size: 48px;
+}
+
+.mapLoading p {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@media (max-height: 700px) {
+  .controlPanel {
+    padding: 18px;
+  }
+}
+
+/* Desktop layout (>= 768px) */
+@media (min-width: 768px) {
+  .header {
+    padding: var(--space-4);
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .geoButtonWrapper {
+    top: calc(env(safe-area-inset-top) + 100px);
+  }
+
+  .bottomControls {
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+  }
+
+  .bottomControlsWithHistory {
+    right: 320px;
+  }
+
+  .controlPanel {
+    width: 400px;
+  }
+}
