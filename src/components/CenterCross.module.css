@@ -1,0 +1,32 @@
+.cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 500;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  width: 24px;
+  height: 24px;
+}
+
+.cross::before,
+.cross::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.cross::before {
+  width: 24px;
+  height: 2px;
+}
+
+.cross::after {
+  width: 2px;
+  height: 24px;
+}
