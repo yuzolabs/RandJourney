@@ -112,8 +112,8 @@ export default function App() {
             </h1>
             <button
               className={styles.historyToggle}
-              onClick={() => setIsHistoryOpen(true)}
-              aria-label="履歴を開く"
+              onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+              aria-label={isHistoryOpen ? "履歴を閉じる" : "履歴を開く"}
               aria-expanded={isHistoryOpen}
             >
               🕐
