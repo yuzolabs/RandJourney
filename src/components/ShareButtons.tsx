@@ -35,7 +35,7 @@ export default function ShareButtons({ text, url }: ShareButtonsProps) {
         className={styles.shareButton}
         onClick={() => {
           const locationName = extractLocationName(text)
-          const shareText = `あなたは${locationName}にいってらっしゃーい\n`
+          const shareText = `${locationName}にいってらっしゃ～い\n#RandJourney\n`
           shareToX(shareText, url)
         }}
         aria-label="Xで共有"
