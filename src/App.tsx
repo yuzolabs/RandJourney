@@ -1,3 +1,5 @@
+import MapView from './components/MapView'
+
 export default function App() {
-  return <main>RandJourney</main>
+  return <MapView />
 }
