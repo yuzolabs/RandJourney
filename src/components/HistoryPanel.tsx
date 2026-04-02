@@ -29,6 +29,7 @@ export function HistoryPanel({ isOpen, onClose, onSelectEntry, history, onRemove
         className={`${styles.panel} ${isOpen ? styles.open : ''}`}
         aria-label="ダーツ履歴"
         aria-hidden={!isOpen}
+        inert={!isOpen}
       >
         <div className={styles.dragHandle} onClick={onClose}>
           <div className={styles.dragIndicator} />

@@ -1,6 +1,7 @@
 import { Popup } from 'react-leaflet'
 import type { DartResult } from '../hooks/useDartThrow'
-import { buildGoogleMapsUrl, buildGeoUri, buildAppShareUrl } from '../lib/urls'
+import { getShareUrl } from '../hooks/useUrlSharing'
+import { buildGoogleMapsUrl, buildGeoUri } from '../lib/urls'
 import ShareButtons from './ShareButtons'
 import styles from './ResultPopup.module.css'
 
@@ -56,7 +57,7 @@ export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
         <div className={styles.shareSection}>
           <ShareButtons
             text={isUnknown ? '（不明な地点）' : `${result.prefecture} ${result.city}`}
-            url={buildAppShareUrl(result.lat, result.lng)}
+            url={getShareUrl(result.lat, result.lng)}
           />
         </div>
       </div>

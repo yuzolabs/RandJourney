@@ -1,5 +1,3 @@
-await import('../test/setup')
-
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import type L from 'leaflet'
@@ -30,7 +28,7 @@ describe('parseUrlParams', () => {
 describe('getShareUrl', () => {
   it('origin と pathname を含む共有URLを返す', () => {
     const originalPath = window.location.pathname + window.location.search + window.location.hash
-    expect(getShareUrl(35.6812, 139.7671)).toBe('http://localhost/?ll=35.681200,139.767100')
+    expect(getShareUrl(35.6812, 139.7671)).toBe('http://localhost:3000/?ll=35.681200,139.767100')
     window.history.pushState({}, '', originalPath)
   })
 })

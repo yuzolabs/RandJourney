@@ -1,5 +1,3 @@
-await import('./test/setup')
-
 const [{ render }, { default: App }] = await Promise.all([
   import('./test/test-utils'),
   import('./App'),

@@ -1,5 +1,3 @@
-await import('../test/setup')
-
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { act, renderHook } from '@testing-library/react'
 import type { DartResult } from './useDartThrow'

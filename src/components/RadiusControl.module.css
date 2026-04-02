@@ -1,11 +1,4 @@
 .container {
-  --color-primary: #EF4444;
-  --color-primary-dark: #DC2626;
-  --color-primary-light: #FEE2E2;
-  --text-primary: #1F2937;
-  --text-secondary: #6B7280;
-  --color-preset-border: #E5E7EB;
-
   position: relative;
   z-index: var(--z-control);
   display: flex;
@@ -65,8 +58,8 @@
   background: transparent;
   background-image: linear-gradient(
     to right,
-    var(--color-primary) 0%,
-    var(--color-primary) var(--progress, 0%),
+    var(--color-accent) 0%,
+    var(--color-accent) var(--progress, 0%),
     var(--color-separator) var(--progress, 0%),
     var(--color-separator) 100%
   );
@@ -147,8 +140,8 @@
 }
 
 .presetChip:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
   transform: translateY(-2px);
 }
 
@@ -157,9 +150,9 @@
 }
 
 .presetChipActive {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: #FFFFFF;
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
