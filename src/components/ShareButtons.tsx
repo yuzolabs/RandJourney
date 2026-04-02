@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { shareToX, shareNative, copyToClipboard, canShareNative } from '../lib/share'
+import { useCallback, useState } from 'react'
+import { canShareNative, copyToClipboard, shareNative, shareToX } from '../lib/share'
 import styles from './ShareButtons.module.css'
 
 interface ShareButtonsProps {
@@ -7,15 +7,10 @@ interface ShareButtonsProps {
   url: string
 }
 
-const extractCityName = (text: string): string => {
-  if (text === '（不明な地点）') return '不明な地点'
+const extractLocationName = (text: string): string => {
+  if (text === '（不明な地点）') return 'この場所'
 
-  const parts = text.split(' ')
-  if (parts.length >= 2) {
-    return parts[1]
-  }
-
-  return text
+  return text.replace(/\s+/g, '')
 }
 
 export default function ShareButtons({ text, url }: ShareButtonsProps) {
@@ -39,8 +34,8 @@ export default function ShareButtons({ text, url }: ShareButtonsProps) {
         type="button"
         className={styles.shareButton}
         onClick={() => {
-          const cityName = extractCityName(text)
-          const shareText = `あなたは${cityName}にいってらっしゃーい`
+          const locationName = extractLocationName(text)
+          const shareText = `あなたは${locationName}にいってらっしゃーい\n`
           shareToX(shareText, url)
         }}
         aria-label="Xで共有"
