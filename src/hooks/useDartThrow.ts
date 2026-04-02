@@ -11,6 +11,9 @@ export interface DartResult {
   prefecture: string
   city: string
   address: string
+  centerLat: number
+  centerLng: number
+  radiusKm: number
 }
 
 interface UseDartThrowOptions {
@@ -81,6 +84,9 @@ export function useDartThrow({ map, radiusKm }: UseDartThrowOptions) {
         prefecture: geo?.prefecture ?? '',
         city: geo?.city ?? '',
         address: geo?.address ?? '',
+        centerLat: center.lat,
+        centerLng: center.lng,
+        radiusKm,
       }
 
       setResult(dartResult)
@@ -103,6 +109,63 @@ export function useDartThrow({ map, radiusKm }: UseDartThrowOptions) {
     setError(null)
   }, [cancelAutoReset])
 
+  const rethrowDart = useCallback(async () => {
+    if (!result) return
+    if (state === 'throwing') return
+
+    const { centerLat, centerLng, radiusKm: prevRadiusKm } = result
+
+    clearResult()
+    setState('throwing')
+    setError(null)
+
+    try {
+      const point = generateRandomPoint(centerLat, centerLng, prevRadiusKm)
+
+      setIsAnimating(true)
+      animationDeadlineRef.current = Date.now() + 1500 + 200
+      if (animationTimerRef.current !== null) {
+        window.clearTimeout(animationTimerRef.current)
+      }
+      animationTimerRef.current = window.setTimeout(() => {
+        if (animationDeadlineRef.current !== null && Date.now() >= animationDeadlineRef.current) {
+          setIsAnimating(false)
+          animationDeadlineRef.current = null
+        }
+        animationTimerRef.current = null
+      }, 1500 + 200)
+
+      if (map) {
+        map.flyTo([point.lat, point.lng], 15, { duration: 1.5 })
+      }
+
+      const geo = await reverseGeocode(point.lat, point.lng)
+
+      const dartResult: DartResult = {
+        lat: point.lat,
+        lng: point.lng,
+        prefecture: geo?.prefecture ?? '',
+        city: geo?.city ?? '',
+        address: geo?.address ?? '',
+        centerLat,
+        centerLng,
+        radiusKm: prevRadiusKm,
+      }
+
+      setResult(dartResult)
+      setState('done')
+    } catch (_err) {
+      if (animationTimerRef.current !== null) {
+        window.clearTimeout(animationTimerRef.current)
+        animationTimerRef.current = null
+      }
+      animationDeadlineRef.current = null
+      setIsAnimating(false)
+      setError('ダーツを投げられませんでした')
+      setState('error')
+    }
+  }, [map, result, state, clearResult])
+
   useEffect(() => {
     if (state !== 'done') {
       cancelAutoReset()
@@ -118,5 +181,5 @@ export function useDartThrow({ map, radiusKm }: UseDartThrowOptions) {
     return cancelAutoReset
   }, [state, cancelAutoReset, reset])
 
-  return { state, result, error, isAnimating, throwDart, reset, cancelAutoReset }
+  return { state, result, error, isAnimating, throwDart, rethrowDart, reset, cancelAutoReset }
 }

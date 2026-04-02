@@ -23,7 +23,7 @@ import './styles/tokens.css'
 export default function App() {
   const [map, setMap] = useState<L.Map | null>(null)
   const { radius, setRadius } = useRadius()
-  const { state, result, isAnimating, throwDart, reset, cancelAutoReset } = useDartThrow({ map, radiusKm: radius })
+  const { state, result, isAnimating, throwDart, rethrowDart, reset, cancelAutoReset } = useDartThrow({ map, radiusKm: radius })
   const { history, addEntry, removeEntry, clearHistory } = useHistory()
   const sharedLocation = useUrlSharing(map)
 
@@ -37,6 +37,9 @@ export default function App() {
         prefecture: string
         city: string
         address: string
+        centerLat: number
+        centerLng: number
+        radiusKm: number
       }
     | undefined
   >(undefined)
@@ -80,6 +83,9 @@ export default function App() {
           prefecture: geo.prefecture,
           city: geo.city,
           address: geo.address,
+          centerLat: 0,
+          centerLng: 0,
+          radiusKm: 0,
         })
       } else {
         setDisplayResult({
@@ -88,6 +94,9 @@ export default function App() {
           prefecture: '',
           city: '',
           address: '',
+          centerLat: 0,
+          centerLng: 0,
+          radiusKm: 0,
         })
       }
     })
@@ -140,7 +149,7 @@ export default function App() {
                   lat={result.lat}
                   lng={result.lng}
                   result={result}
-                  onRethrow={reset}
+                  onRethrow={rethrowDart}
                 />
               )}
               <DraggableCenter
@@ -190,6 +199,9 @@ export default function App() {
                 prefecture: entry.prefecture,
                 city: entry.city,
                 address: entry.address,
+                centerLat: 0,
+                centerLng: 0,
+                radiusKm: 0,
               })
               if (!isDesktop) {
                 setIsHistoryOpen(false)

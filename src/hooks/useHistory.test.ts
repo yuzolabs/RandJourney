@@ -24,6 +24,9 @@ const mockDartResult: DartResult = {
   prefecture: '東京都',
   city: '千代田区',
   address: '東京都千代田区1-1',
+  centerLat: 35.68,
+  centerLng: 139.76,
+  radiusKm: 10,
 }
 
 const mockDartResult2: DartResult = {
@@ -32,6 +35,9 @@ const mockDartResult2: DartResult = {
   prefecture: '大阪府',
   city: '大阪市',
   address: '大阪府大阪市1-1',
+  centerLat: 34.69,
+  centerLng: 135.50,
+  radiusKm: 10,
 }
 
 const STORAGE_KEY = 'randjourney-history'
