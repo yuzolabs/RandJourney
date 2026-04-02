@@ -155,11 +155,11 @@ export default function App() {
             <FirstTimeHint />
 
             <div className={styles.bottomControls}>
-              <div className={styles.radiusControlWrapper}>
+              <div className={styles.controlPanel}>
                 <RadiusControl radius={radius} onRadiusChange={setRadius} />
-              </div>
-              <div className={styles.dartButtonWrapper}>
-                <DartButton state={state} onThrow={throwDart} />
+                <div className={styles.dartButtonContainer}>
+                  <DartButton state={state} onThrow={throwDart} />
+                </div>
               </div>
             </div>
           </div>

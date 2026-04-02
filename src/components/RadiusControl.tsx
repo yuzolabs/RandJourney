@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import React, { ChangeEvent } from 'react'
 import styles from './RadiusControl.module.css'
 
 interface RadiusControlProps {
@@ -20,17 +20,22 @@ export default function RadiusControl({ radius, onRadiusChange }: RadiusControlP
 
   const presets = [1, 5, 10, 25, 50, 100, 200]
 
+  const min = 1
+  const max = 200
+  const percentage = ((radius - min) / (max - min)) * 100
+
   return (
     <div className={styles.container} data-testid="radius-control">
       <div className={styles.header}>
         <input
           type="number"
           className={styles.numberInput}
-          min={1}
-          max={200}
+          min={min}
+          max={max}
           value={radius}
           onChange={handleInputChange}
           onBlur={handleInputChange}
+          aria-label="距離（km）を入力"
         />
         <span className={styles.label}>km</span>
       </div>
@@ -38,11 +43,16 @@ export default function RadiusControl({ radius, onRadiusChange }: RadiusControlP
         <input
           type="range"
           className={styles.slider}
-          min={1}
-          max={200}
+          min={min}
+          max={max}
           step={1}
           value={radius}
           onChange={handleSliderChange}
+          aria-label="距離を選択"
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={radius}
+          style={{ '--progress': `${percentage}%` } as React.CSSProperties}
         />
       </div>
       <div className={styles.presetsContainer}>
@@ -52,6 +62,7 @@ export default function RadiusControl({ radius, onRadiusChange }: RadiusControlP
             type="button"
             className={`${styles.presetChip} ${radius === preset ? styles.presetChipActive : ''}`}
             onClick={() => onRadiusChange(preset)}
+            aria-label={`${preset}キロメートル`}
           >
             {preset}
           </button>
