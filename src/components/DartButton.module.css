@@ -19,7 +19,7 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
 
-  box-shadow: 0 4px 20px rgba(255, 59, 48, 0.4);
+  box-shadow: var(--shadow-glow-accent);
 
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 
@@ -28,12 +28,12 @@
 
 .button:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 6px 24px rgba(255, 59, 48, 0.5);
+  box-shadow: var(--shadow-glow-accent-hover);
 }
 
 .button:active:not(:disabled) {
   transform: scale(0.95);
-  box-shadow: 0 2px 12px rgba(255, 59, 48, 0.3);
+  box-shadow: var(--shadow-glow-accent-active);
 }
 
 .button:disabled {

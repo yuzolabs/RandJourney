@@ -1,39 +1,26 @@
-import { useEffect, useRef } from 'react'
-import { useMap } from 'react-leaflet'
 import L from 'leaflet'
+import { Marker } from 'react-leaflet'
+import ResultPopup from './ResultPopup'
+import type { DartResult } from '../hooks/useDartThrow'
 
 interface DartMarkerProps {
   lat: number
   lng: number
+  result?: DartResult
+  onRethrow?: () => void
 }
 
-export default function DartMarker({ lat, lng }: DartMarkerProps) {
-  const map = useMap()
-  const markerRef = useRef<L.Marker | null>(null)
+export default function DartMarker({ lat, lng, result, onRethrow }: DartMarkerProps) {
+  const icon = L.divIcon({
+    html: '<span style="font-size:32px;line-height:1">🎯</span>',
+    className: '',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  })
 
-  useEffect(() => {
-    if (markerRef.current) {
-      map.removeLayer(markerRef.current)
-    }
-
-    const icon = L.divIcon({
-      html: '<span style="font-size:32px;line-height:1">🎯</span>',
-      className: '',
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
-    })
-
-    const marker = L.marker([lat, lng], { icon })
-    marker.addTo(map)
-    markerRef.current = marker
-
-    return () => {
-      if (markerRef.current) {
-        map.removeLayer(markerRef.current)
-        markerRef.current = null
-      }
-    }
-  }, [map, lat, lng])
-
-  return null
+  return (
+    <Marker position={[lat, lng]} icon={icon}>
+      {result && <ResultPopup result={result} onRethrow={onRethrow} />}
+    </Marker>
+  )
 }

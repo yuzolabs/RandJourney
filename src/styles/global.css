@@ -17,3 +17,11 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+@media (prefers-color-scheme: dark) {
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+  }
+}

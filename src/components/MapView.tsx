@@ -23,9 +23,11 @@ const DEFAULT_ZOOM = 10
 
 interface MapViewProps {
   className?: string
+  children?: React.ReactNode
+  onMapCreated?: (map: L.Map) => void
 }
 
-export default function MapView({ className }: MapViewProps) {
+export default function MapView({ className, children, onMapCreated }: MapViewProps) {
   const mapRef = useRef<L.Map | null>(null)
 
   return (
@@ -35,10 +37,16 @@ export default function MapView({ className }: MapViewProps) {
       maxZoom={18}
       minZoom={5}
       zoomControl={false}
-      ref={mapRef}
+      ref={(map) => {
+        mapRef.current = map
+        if (map && onMapCreated) {
+          onMapCreated(map)
+        }
+      }}
       className={`${styles.mapContainer}${className ? ` ${className}` : ''}`}
     >
       <TileLayer url={GSI_TILE_URL} attribution={GSI_ATTRIBUTION} />
+      {children}
     </MapContainer>
   )
 }

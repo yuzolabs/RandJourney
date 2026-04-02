@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { JSDOM } from 'jsdom'
 
-const dom = new JSDOM('<!doctype html><html><body></body></html>')
+const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost/' })
 const { window } = dom
 
 globalThis.window = window as unknown as Window & typeof globalThis.window

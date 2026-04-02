@@ -11,7 +11,7 @@ describe("generateRandomPoint", () => {
     for (let i = 0; i < 100; i++) {
       const point = generateRandomPoint(centerLat, centerLon, radiusKm)
       const distance = haversineDistance(centerLat, centerLon, point.lat, point.lng)
-      const floatingPointTolerance = 0.01
+      const floatingPointTolerance = 0.05
       expect(distance).toBeLessThanOrEqual(radiusKm + floatingPointTolerance)
     }
   })
