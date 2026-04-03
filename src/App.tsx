@@ -29,6 +29,7 @@ export default function App() {
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isControlExpanded, setIsControlExpanded] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [displayResult, setDisplayResult] = useState<
     | {
@@ -48,7 +49,11 @@ export default function App() {
     if (typeof window.matchMedia !== 'function') return
     const mql = window.matchMedia('(min-width: 768px)')
     setIsDesktop(mql.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    if (mql.matches) setIsControlExpanded(true)
+    const handler = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches)
+      if (e.matches) setIsControlExpanded(true)
+    }
     mql.addEventListener('change', handler)
     return () => mql.removeEventListener('change', handler)
   }, [])
@@ -66,8 +71,11 @@ export default function App() {
     if (result && result !== lastResultRef.current) {
       addEntry(result)
       lastResultRef.current = result
+      if (!isDesktop) {
+        setIsControlExpanded(false)
+      }
     }
-  }, [result, addEntry])
+  }, [result, addEntry, isDesktop])
 
   useEffect(() => {
     if (!sharedLocation) {
@@ -175,7 +183,21 @@ export default function App() {
               className={`${styles.bottomControls} ${isHistoryOpen && isDesktop ? styles.bottomControlsWithHistory : ''}`}
             >
               <div className={styles.controlPanel}>
-                <RadiusControl radius={radius} onRadiusChange={setRadius} />
+                {!isDesktop && (
+                  <button
+                    className={styles.controlToggle}
+                    onClick={() => setIsControlExpanded((v) => !v)}
+                    aria-label={isControlExpanded ? "設定を閉じる" : "設定を開く"}
+                    aria-expanded={isControlExpanded}
+                  >
+                    <span className={`${styles.controlToggleIcon} ${isControlExpanded ? styles.controlToggleIconExpanded : ''}`}>⚙️</span>
+                  </button>
+                )}
+                <div
+                  className={`${styles.radiusControlWrapper} ${isControlExpanded || isDesktop ? styles.radiusControlExpanded : styles.radiusControlCollapsed}`}
+                >
+                  <RadiusControl radius={radius} onRadiusChange={setRadius} />
+                </div>
                 <div className={styles.dartButtonContainer}>
                   <DartButton state={state} onThrow={throwDart} />
                 </div>
