@@ -1,0 +1,9 @@
+.mapContainer {
+  height: 100dvh;
+  width: 100%;
+}
+
+.mapContainer :global(.leaflet-container) {
+  height: 100%;
+  width: 100%;
+}
