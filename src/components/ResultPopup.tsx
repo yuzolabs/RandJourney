@@ -19,7 +19,7 @@ export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
 
   return (
     <Popup
-      minWidth={240}
+      minWidth={220}
       maxWidth={320}
       maxHeight={300}
       offset={[0, -16]}
