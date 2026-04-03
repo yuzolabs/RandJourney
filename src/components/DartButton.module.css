@@ -91,6 +91,11 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .button:not(.throwing):not(.done) .icon {
+    animation: spinSlow 8s linear infinite;
+    transform-origin: center center;
+  }
+
   .dice {
     animation: diceRoll 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
     transform-origin: center center;
@@ -136,4 +141,9 @@
 @keyframes popIn {
   0% { transform: scale(0.5); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
