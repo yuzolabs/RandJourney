@@ -24,28 +24,28 @@
 /* Header overlay */
 .header {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: calc(env(safe-area-inset-top) + var(--space-2)) var(--space-4) var(--space-2);
+  top: calc(env(safe-area-inset-top) + var(--space-2));
+  left: var(--space-2);
+  padding: var(--header-padding-y) var(--header-padding-x);
   background: var(--color-glass-bg);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   z-index: 600;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 0.5px solid var(--color-border-subtle);
+  justify-content: flex-start;
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-header);
   touch-action: auto;
   pointer-events: auto;
+  width: fit-content;
 }
 
 .title {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-  font-size: var(--font-size-hero, 28px);
+  font-size: var(--header-title-size);
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-accent), var(--color-danger));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 82%, transparent), color-mix(in srgb, var(--color-danger) 72%, transparent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
@@ -56,10 +56,14 @@
 }
 
 .titleIcon {
-  -webkit-text-fill-color: initial;
+  display: flex;
+  align-items: center;
 }
 
 .historyToggle {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + var(--space-4));
+  right: var(--space-4);
   background: var(--color-overlay-hover);
   border: none;
   margin: 0;
@@ -73,11 +77,19 @@
   cursor: pointer;
   transition: transform 0.2s, background 0.2s;
   box-shadow: inset 0 0 0 0.5px var(--color-border-subtle);
+  z-index: 1000;
+  pointer-events: auto;
 }
 
 .historyToggle:active {
   transform: scale(0.95);
   background: var(--color-overlay-active);
+}
+
+.historyToggleHidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* GeoButton inside map */
@@ -269,6 +281,10 @@
     gap: var(--space-2);
   }
 
+  .historyToggle {
+    top: calc(env(safe-area-inset-top) + 28px);
+  }
+
   .controlPanel {
     padding: 12px;
   }
@@ -281,11 +297,12 @@
 /* Desktop layout */
 @media (min-width: 1024px), (min-width: 768px) and (min-height: 600px) {
   .header {
-    padding: var(--space-4);
+    top: calc(env(safe-area-inset-top) + var(--space-4));
+    left: var(--space-4);
   }
 
   .title {
-    font-size: 32px;
+    font-size: 24px;
   }
 
   .geoButtonWrapper {

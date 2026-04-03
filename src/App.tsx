@@ -13,6 +13,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import Toast from './components/Toast'
 import ResultCard from './components/ResultCard'
 import BottomSheet from './components/BottomSheet'
+import BrandLogo from './components/BrandLogo'
 import { useDartThrow } from './hooks/useDartThrow'
 import { useUrlSharing } from './hooks/useUrlSharing'
 import { useRadius } from './hooks/useRadius'
@@ -142,18 +143,20 @@ export default function App() {
         <div className={styles.mainContent}>
           <header className={styles.header}>
             <h1 className={styles.title}>
-              <span className={styles.titleIcon}>🎯</span>
+              <BrandLogo />
               RandJourney
             </h1>
-            <button
-              className={styles.historyToggle}
-              onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-              aria-label={isHistoryOpen ? "履歴を閉じる" : "履歴を開く"}
-              aria-expanded={isHistoryOpen}
-            >
-              🕐
-            </button>
           </header>
+
+          <button
+            type="button"
+            className={`${styles.historyToggle} ${isHistoryOpen ? styles.historyToggleHidden : ''}`}
+            onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+            aria-label={isHistoryOpen ? "履歴を閉じる" : "履歴を開く"}
+            aria-expanded={isHistoryOpen}
+          >
+            🕐
+          </button>
 
           <div className={styles.mapArea}>
             {!map && (
@@ -216,13 +219,25 @@ export default function App() {
                       <DartButton state={state} onThrow={throwDart} />
                     </div>
                     <button
+                      type="button"
                       className={styles.settingsButton}
                       onClick={() => setIsControlExpanded(true)}
                       aria-label="設定を開く"
                       aria-expanded={isControlExpanded}
                     >
                       <span className={styles.settingsIcon} aria-hidden="true">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
                           <line x1="4" y1="21" x2="4" y2="14"></line>
                           <line x1="4" y1="10" x2="4" y2="3"></line>
                           <line x1="12" y1="21" x2="12" y2="12"></line>
