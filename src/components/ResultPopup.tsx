@@ -13,9 +13,20 @@ interface ResultPopupProps {
 export default function ResultPopup({ result, onRethrow }: ResultPopupProps) {
   const isUnknown = result.prefecture === '' && result.city === ''
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+  }
+
   return (
-    <Popup minWidth={240} maxWidth={320} offset={[0, -16]}>
-      <div className={styles.popupContainer}>
+    <Popup
+      minWidth={240}
+      maxWidth={320}
+      maxHeight={300}
+      offset={[0, -16]}
+      autoPanPaddingTopLeft={[10, 70]}
+      autoPanPaddingBottomRight={[10, 100]}
+    >
+      <div className={styles.popupContainer} onTouchMove={handleTouchMove}>
         <div className={styles.header}>
           {isUnknown ? (
             <h2 className={styles.title}>（不明な地点）</h2>

@@ -43,3 +43,9 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
 }
+
+@media (max-width: 767px) {
+  .shareButton {
+    min-height: 40px;
+  }
+}
