@@ -1,8 +1,9 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "my-repository-template",
+      "name": "RandJourney",
       "devDependencies": {
         "@textlint-ja/textlint-rule-preset-ai-writing": "^1.6.1",
         "markdownlint-cli2": "^0.18.1",

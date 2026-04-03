@@ -48,7 +48,7 @@ fi
 INIT_SCRIPT="${WORKSPACE_PATH}/.devcontainer/host-initialize.sh"
 echo "[INFO] Initializing DevContainer configuration..."
 if [[ -f "$INIT_SCRIPT" ]]; then
-  if ! bash "$INIT_SCRIPT" "$WORKSPACE_PATH" "$WORKSPACE_NAME" "/workspaces/my-repository-template" "/workspace"; then
+  if ! bash "$INIT_SCRIPT" "$WORKSPACE_PATH" "$WORKSPACE_NAME" "/workspaces/RandJourney" "/workspace"; then
     echo "[WARNING] Initialization script failed, but continuing..."
   fi
 else

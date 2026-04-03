@@ -13,8 +13,8 @@ services:
     environment:
       - UV_LINK_MODE=copy
       # メインリポジトリとworktreesのパスを環境変数として渡す
-      - MAIN_REPO_PATH=${MAIN_REPO_PATH:-/workspaces/my-repository-template}
-      - WORKTREES_PATH=${WORKTREES_PATH:-/workspaces/my-repository-template.worktrees}
+      - MAIN_REPO_PATH=${MAIN_REPO_PATH:-/workspaces/RandJourney}
+      - WORKTREES_PATH=${WORKTREES_PATH:-/workspaces/RandJourney.worktrees}
     command: sleep infinity
 
 volumes:
