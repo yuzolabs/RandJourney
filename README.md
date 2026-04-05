@@ -96,4 +96,85 @@ Docker が必要です。
 
 ### ライセンス
 
+opencode の設定ファイルについては、ホスト側の設定をそのまま使用できます。
+
+### OpenCodeの設定
+
+このリポジトリでは OpenCode を使うことを前提としているので、`$HOME/.local/share/opencode/auth.json`が存在しないと DevContainer の作成に失敗します。
+Windows は WSL2 上、Mac の場合は通常の環境にて`opencode auth login`による認証を1回以上行ってください。
+
+もし OpenCode にて認証をしなくても使えるモデルのみを使用する場合は、空ファイルとして作成してください。
+
+### MCPサーバーのセットアップ
+
+環境変数`CONTEXT7_API_KEY`に Context7の API キーを設定してください。
+
+### Dev Containerについて
+
+このリポジトリをデフォルトの名前で clone することを想定しています。
+名前を変えると動作しなくなる可能性があります。
+
+Dev Container 起動時には、`initializeCommand` で host 側の Git worktree メタデータを検証し、コンテナ専用の `.git` / `gitdir` オーバーレイファイルを `.devcontainer/` 配下に生成します。
+host 側の実際の `.git` 管理ファイルは書き換えないため、worktree は先に host 側で正しく作成してから VS Code で開いてください。
+
+具体的には以下の条件を満たしている必要があります。
+
+- host 側で `bash` が利用できること
+- worktree を `../<repo>.worktrees/<branch-name>` に配置すること
+- worktree 管理ディレクトリ名と workspace ディレクトリ名が一致していること
+
+#### git worktreeについて
+
+このリポジトリは`git worktree`を使用して Dev Container 環境を構築できます。
+
+但し、VSCode 仕様の worktree ディレクトリ構造を作成してください。構造は以下の通りです。
+
+```txt
+..
+├── RandJourney
+└── RandJourney.worktrees
+    ├── feat-branch1
+    └── fix-branch2
+```
+
+`fix-branch2/.git` は Git worktree の管理ファイルです。Dev Container ではこの実ファイルを直接書き換えず、コンテナ内だけで使うオーバーレイファイルを mount して current worktree を参照させます。
+
+過去バージョンの設定で `/workspace` を指す壊れた worktree メタデータが残っている場合は、main リポジトリ側で以下を実行して掃除してください。
+
+```bash
+git -C ../RandJourney worktree prune --expire now
+```
+
+#### worktrunkを使用する場合
+
+以下の設定を`~/.config/worktrunk`に追加します。
+
+```txt
+worktree-path = "{{ repo_path }}/../{{ repo }}.worktrees/{{ branch | sanitize }}"
+```
+
+```bash
+wt switch --create feat-branch1
+```
+
+### DevContainer CLIの使い方
+
+DevContainer CLI を使用することで、VSCode 経由の Dev Container よりも軽量かつ高速にコンテナの準備ができます。
+Vibe Coding にはこちらがおすすめです。
+
+#### Windowsの場合
+
+Docker Desktop を起動し、以下のコマンドで Dev Container 環境を作成します。
+コンテナがない場合は自動で作成します。
+
+```batch
+.\.devcontainer\scripts\devcontainer-exec.bat
+```
+
+#### macOS, Linuxの場合
+
+```bash
+.devcontainer/scripts/devcontainer-exec.sh
+```
+
 [MIT License](LICENSE)

@@ -9,7 +9,6 @@ interface DartButtonProps {
 
 export default function DartButton({ state, onThrow }: DartButtonProps) {
   const isLoading = state === 'throwing'
-  const isDone = state === 'done'
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -24,7 +23,7 @@ export default function DartButton({ state, onThrow }: DartButtonProps) {
   return (
     <button
       type="button"
-      className={`${styles.button} ${isLoading ? styles.throwing : ''} ${isDone ? styles.done : ''}`}
+      className={`${styles.button} ${isLoading ? styles.throwing : ''}`}
       onClick={onThrow}
       disabled={isLoading}
       data-testid="dart-button"
@@ -34,11 +33,6 @@ export default function DartButton({ state, onThrow }: DartButtonProps) {
         <>
           <span className={`${styles.icon} ${styles.dice}`} aria-hidden="true">🎲</span>
           <span className={styles.label}>抽選中...</span>
-        </>
-      ) : isDone ? (
-        <>
-          <span className={`${styles.icon} ${styles.success}`} aria-hidden="true">🎯</span>
-          <span className={styles.label}>到着！</span>
         </>
       ) : (
         <>

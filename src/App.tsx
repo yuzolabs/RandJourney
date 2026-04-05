@@ -12,6 +12,8 @@ import { HistoryPanel } from './components/HistoryPanel'
 import ErrorBoundary from './components/ErrorBoundary'
 import Toast from './components/Toast'
 import ResultCard from './components/ResultCard'
+import BottomSheet from './components/BottomSheet'
+import BrandLogo from './components/BrandLogo'
 import { useDartThrow } from './hooks/useDartThrow'
 import { useUrlSharing } from './hooks/useUrlSharing'
 import { useRadius } from './hooks/useRadius'
@@ -28,7 +30,12 @@ export default function App() {
   const sharedLocation = useUrlSharing(map)
 
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+  })
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isControlExpanded, setIsControlExpanded] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [displayResult, setDisplayResult] = useState<
     | {
@@ -45,13 +52,30 @@ export default function App() {
   >(undefined)
 
   useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return
-    const mql = window.matchMedia('(min-width: 768px)')
-    setIsDesktop(mql.matches)
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
-    mql.addEventListener('change', handler)
-    return () => mql.removeEventListener('change', handler)
+    const handler = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener('resize', handler)
+    handler()
+    return () => window.removeEventListener('resize', handler)
   }, [])
+
+  useEffect(() => {
+    const { width, height } = windowSize
+    if (width === 0 && height === 0) return
+    const newIsDesktop = width >= 768 && !(width < 1024 && height < 600)
+    
+    setIsDesktop(prev => {
+      if (prev !== newIsDesktop) {
+        if (newIsDesktop) setIsControlExpanded(true)
+        return newIsDesktop
+      }
+      return prev
+    })
+  }, [windowSize])
 
   const lastHistoryLengthRef = useRef(0)
   useEffect(() => {
@@ -66,8 +90,11 @@ export default function App() {
     if (result && result !== lastResultRef.current) {
       addEntry(result)
       lastResultRef.current = result
+      if (!isDesktop) {
+        setIsControlExpanded(false)
+      }
     }
-  }, [result, addEntry])
+  }, [result, addEntry, isDesktop])
 
   useEffect(() => {
     if (!sharedLocation) {
@@ -116,18 +143,20 @@ export default function App() {
         <div className={styles.mainContent}>
           <header className={styles.header}>
             <h1 className={styles.title}>
-              <span className={styles.titleIcon}>🎯</span>
+              <BrandLogo />
               RandJourney
             </h1>
-            <button
-              className={styles.historyToggle}
-              onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-              aria-label={isHistoryOpen ? "履歴を閉じる" : "履歴を開く"}
-              aria-expanded={isHistoryOpen}
-            >
-              🕐
-            </button>
           </header>
+
+          <button
+            type="button"
+            className={`${styles.historyToggle} ${isHistoryOpen ? styles.historyToggleHidden : ''}`}
+            onClick={() => setIsHistoryOpen(!isHistoryOpen)}
+            aria-label={isHistoryOpen ? "履歴を閉じる" : "履歴を開く"}
+            aria-expanded={isHistoryOpen}
+          >
+            🕐
+          </button>
 
           <div className={styles.mapArea}>
             {!map && (
@@ -174,12 +203,63 @@ export default function App() {
             <div
               className={`${styles.bottomControls} ${isHistoryOpen && isDesktop ? styles.bottomControlsWithHistory : ''}`}
             >
-              <div className={styles.controlPanel}>
-                <RadiusControl radius={radius} onRadiusChange={setRadius} />
-                <div className={styles.dartButtonContainer}>
-                  <DartButton state={state} onThrow={throwDart} />
+              {isDesktop ? (
+                <div className={styles.controlPanel}>
+                  <div className={`${styles.radiusControlWrapper} ${styles.radiusControlExpanded}`}>
+                    <RadiusControl radius={radius} onRadiusChange={setRadius} />
+                  </div>
+                  <div className={styles.dartButtonContainer}>
+                    <DartButton state={state} onThrow={throwDart} />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div className={styles.mobileActionRow}>
+                    <div className={styles.dartButtonContainer}>
+                      <DartButton state={state} onThrow={throwDart} />
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.settingsButton}
+                      onClick={() => setIsControlExpanded(true)}
+                      aria-label="設定を開く"
+                      aria-expanded={isControlExpanded}
+                    >
+                      <span className={styles.settingsIcon} aria-hidden="true">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="24"
+                          height="24"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <line x1="4" y1="21" x2="4" y2="14"></line>
+                          <line x1="4" y1="10" x2="4" y2="3"></line>
+                          <line x1="12" y1="21" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12" y2="3"></line>
+                          <line x1="20" y1="21" x2="20" y2="16"></line>
+                          <line x1="20" y1="12" x2="20" y2="3"></line>
+                          <line x1="1" y1="14" x2="7" y2="14"></line>
+                          <line x1="9" y1="8" x2="15" y2="8"></line>
+                          <line x1="17" y1="16" x2="23" y2="16"></line>
+                        </svg>
+                      </span>
+                      <span className={styles.settingsLabel}>設定</span>
+                    </button>
+                  </div>
+                  <BottomSheet
+                    isOpen={isControlExpanded}
+                    onClose={() => setIsControlExpanded(false)}
+                  >
+                    <RadiusControl radius={radius} onRadiusChange={setRadius} />
+                  </BottomSheet>
+                </>
+              )}
             </div>
           </div>
         </div>
