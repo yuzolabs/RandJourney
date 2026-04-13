@@ -9,3 +9,7 @@ node_modules
 dist/
 .playwright-mcp/
 tsconfig.tsbuildinfo
+
+oh-my-opencode.json
+oh-my-openagent.json
+pr.md
