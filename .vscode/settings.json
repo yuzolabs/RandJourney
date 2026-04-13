@@ -4,7 +4,7 @@
         "markdownlint",
         "prek",
         "copilot",
-        "oh-my-opencode",
+        "oh-my-openagent",
         "devcontainer"
     ],
     "chat.tools.terminal.autoApprove": {
